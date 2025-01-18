@@ -5,14 +5,20 @@ using UnityEngine;
 public class Collectable : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
+    [SerializeField] int infectionScore = 1;
+    [SerializeField] int bugsCaughtscore = 1;
 
     private Rigidbody2D rb;
     private Mainframe mainframe;
+    private GameManager gameManager;
+    private ScreenShake screenShake;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         mainframe = FindObjectOfType<Mainframe>();
+        gameManager = FindObjectOfType<GameManager>();
+        screenShake = FindObjectOfType<ScreenShake>();
     }
 
     void Update()
@@ -23,7 +29,7 @@ public class Collectable : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("Click");
+        gameManager.AddBugsCaughtScore(bugsCaughtscore);
         Destroy(this.gameObject);
     }
 
@@ -31,6 +37,8 @@ public class Collectable : MonoBehaviour
     {
         if(collision.CompareTag("Mainframe"))
         {
+            gameManager.AddInfectedScore(infectionScore);
+            screenShake.TriggerShake();
             Destroy(this.gameObject);
         }
     }
