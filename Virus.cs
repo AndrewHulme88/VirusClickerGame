@@ -8,6 +8,8 @@ public class Virus : MonoBehaviour
     [SerializeField] int infectionScore = 1;
     [SerializeField] int bugsCaughtscore = 1;
     [SerializeField] int health = 1;
+    [SerializeField] GameObject hitParticles;
+    [SerializeField] float deathDelay = 1f;
 
     [Header("Splitter")]
     [SerializeField] bool isSplitter = false;
@@ -16,13 +18,17 @@ public class Virus : MonoBehaviour
     [SerializeField] float splitOffest = 1f;
 
     private Rigidbody2D rb;
+    private Animator animator;
     private Mainframe mainframe;
     private GameManager gameManager;
     private ScreenShake screenShake;
 
+    private bool isDying = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         mainframe = FindObjectOfType<Mainframe>();
         gameManager = FindObjectOfType<GameManager>();
         screenShake = FindObjectOfType<ScreenShake>();
@@ -30,27 +36,47 @@ public class Virus : MonoBehaviour
 
     void Update()
     {
+        if (isDying) return;
         Vector3 direction = (mainframe.transform.position - transform.position).normalized;
         rb.velocity = direction * moveSpeed;
     }
 
     private void OnMouseDown()
     {
+        if (isDying) return;
+
         Damage();
     }
 
     private void Damage()
     {
+        CreateHitParticles();
+        animator.SetTrigger("hit");
         health--;
         if(health <= 0)
         {
+            isDying = true;
+
             if(isSplitter)
             {
                 Split();
             }
             gameManager.AddBugsCaughtScore(bugsCaughtscore);
-            Destroy(this.gameObject);
+            DisableVirus();
+            StartCoroutine(DestroyAfterAnimation());
         }
+    }
+
+    private void DisableVirus()
+    {
+        GetComponent<Collider2D>().enabled = false;
+        rb.velocity = Vector2.zero;
+    }
+
+    private IEnumerator DestroyAfterAnimation()
+    {
+        yield return new WaitForSeconds(deathDelay);
+        Destroy(this.gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -61,6 +87,12 @@ public class Virus : MonoBehaviour
             screenShake.TriggerShake();
             Destroy(this.gameObject);
         }
+    }
+
+    private void CreateHitParticles()
+    {
+        GameObject newParticles = Instantiate(hitParticles, transform.position, Quaternion.identity);
+        Destroy(newParticles, 2f);
     }
 
     private void Split()
