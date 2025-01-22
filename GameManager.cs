@@ -6,17 +6,39 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance {  get; private set; }
+
     [SerializeField] TextMeshProUGUI infectedScoreText;
     [SerializeField] TextMeshProUGUI bugsCaughtScoreText;
-    [SerializeField] public int bugsLeft = 20;
-    [SerializeField] public int mainframeHealth = 10;
+    [SerializeField] TextMeshProUGUI bugsLeftText;
     [SerializeField] string nextLevelString;
 
-    public int bugsCaughtScore;
+    public int bugsLeft = 20;
+    public int mainframeHealth = 10;
+
+    //private void Awake()
+    //{
+    //    if (Instance == null)
+    //    {
+    //        Instance = this;
+    //        DontDestroyOnLoad(gameObject);
+    //    }
+    //    else
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //}
 
     void Start()
     {
-        bugsCaughtScore = 0;
+        UpdateScoreUI();
+    }
+
+    public void AssignUIElements(TextMeshProUGUI infectedScore, TextMeshProUGUI bugsCaught, TextMeshProUGUI bugsLeft)
+    {
+        infectedScoreText = infectedScore;
+        bugsCaughtScoreText = bugsCaught;
+        bugsLeftText = bugsLeft;
         UpdateScoreUI();
     }
 
@@ -29,7 +51,7 @@ public class GameManager : MonoBehaviour
 
     public void AddBugsCaughtScore(int score)
     {
-        bugsCaughtScore += score;
+        Score.score += score;
         bugsLeft -= score;
         UpdateScoreUI();
     }
@@ -37,7 +59,8 @@ public class GameManager : MonoBehaviour
     private void UpdateScoreUI()
     {
         infectedScoreText.text = "Mainframe Health: " + mainframeHealth.ToString();
-        bugsCaughtScoreText.text = "Bugs Remaining: " + bugsLeft.ToString();
+        bugsCaughtScoreText.text = "Bugs Killed: " + Score.score.ToString();
+        bugsLeftText.text = "Bugs Remaining: " + bugsLeft.ToString();
 
         if (mainframeHealth <= 0)
         {
