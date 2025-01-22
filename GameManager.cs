@@ -7,32 +7,34 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI infectedScoreText;
     [SerializeField] TextMeshProUGUI bugsCaughtScoreText;
+    [SerializeField] public int bugsLeft = 20;
+    [SerializeField] public int mainframeHealth = 10;
 
-    public int infectedScore;
     public int bugsCaughtScore;
 
     void Start()
     {
-        infectedScore = 0;
         bugsCaughtScore = 0;
         UpdateScoreUI();
     }
 
     public void AddInfectedScore(int score)
     {
-        infectedScore += score;
+        mainframeHealth -= score;
+        bugsLeft -= score;
         UpdateScoreUI();
     }
 
     public void AddBugsCaughtScore(int score)
     {
         bugsCaughtScore += score;
+        bugsLeft -= score;
         UpdateScoreUI();
     }
 
     private void UpdateScoreUI()
     {
-        infectedScoreText.text = "Infected: " + infectedScore.ToString();
-        bugsCaughtScoreText.text = "Bugs Caught: " + bugsCaughtScore.ToString();
+        infectedScoreText.text = "Mainframe Health: " + mainframeHealth.ToString();
+        bugsCaughtScoreText.text = "Bugs Remaining: " + bugsLeft.ToString();
     }
 }
