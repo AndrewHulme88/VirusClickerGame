@@ -50,11 +50,11 @@ public class Virus : MonoBehaviour
 
     private void Damage()
     {
-        CreateHitParticles();
         animator.SetTrigger("hit");
         health--;
         if(health <= 0)
         {
+            CreateHitParticles();
             isDying = true;
 
             if(isSplitter)

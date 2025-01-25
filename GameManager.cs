@@ -12,26 +12,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI bugsCaughtScoreText;
     [SerializeField] TextMeshProUGUI bugsLeftText;
     [SerializeField] string nextLevelString;
+    [SerializeField] float sceneTransitionTime = 1f;
 
     public int bugsLeft = 20;
     public int mainframeHealth = 10;
 
-    //private void Awake()
-    //{
-    //    if (Instance == null)
-    //    {
-    //        Instance = this;
-    //        DontDestroyOnLoad(gameObject);
-    //    }
-    //    else
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //}
+    private SceneTransition sceneTransition;
 
     void Start()
     {
         UpdateScoreUI();
+        sceneTransition = FindObjectOfType<SceneTransition>();
     }
 
     public void AssignUIElements(TextMeshProUGUI infectedScore, TextMeshProUGUI bugsCaught, TextMeshProUGUI bugsLeft)
@@ -64,22 +55,26 @@ public class GameManager : MonoBehaviour
 
         if (mainframeHealth <= 0)
         {
-            GameOver();
+            StartCoroutine(GameOver());
         }
 
         if(bugsLeft <= 0)
         {
-            NextLevel();
+            StartCoroutine(NextLevel());
         }
     }
 
-    private void NextLevel()
+    IEnumerator NextLevel()
     {
+        sceneTransition.FadeOut();
+        yield return new WaitForSeconds(sceneTransitionTime);
         SceneManager.LoadScene(nextLevelString);
     }
 
-    private void GameOver()
+    IEnumerator GameOver()
     {
+        sceneTransition.FadeOut();
+        yield return new WaitForSeconds(sceneTransitionTime);
         SceneManager.LoadScene("GameOver");
     }
 }
