@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
 
         if(bugsLeft <= 0)
         {
+            DestroyAllViruses();
             StartCoroutine(NextLevel());
         }
     }
@@ -76,5 +77,14 @@ public class GameManager : MonoBehaviour
         sceneTransition.FadeOut();
         yield return new WaitForSeconds(sceneTransitionTime);
         SceneManager.LoadScene("GameOver");
+    }
+
+    private void DestroyAllViruses()
+    {
+        GameObject[] viruses = GameObject.FindGameObjectsWithTag("Virus");
+        foreach (GameObject virus in viruses)
+        {
+            Destroy(virus);
+        }
     }
 }

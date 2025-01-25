@@ -5,9 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField] GameObject startTransition;
+    [SerializeField] GameObject endTransition;
     [SerializeField] float sceneTransitionTime = 1f;
 
-    private SceneTransition sceneTransition;
+    private void Start()
+    {
+        endTransition.SetActive(false);
+        startTransition.SetActive(true);
+        StartCoroutine(DisableTransitionScreen());
+    }
 
     public void StartNewGame()
     {
@@ -21,15 +28,21 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator TransitionToNewGame()
     {
-        sceneTransition.FadeOut();
+        endTransition.SetActive(true);
         yield return new WaitForSeconds(sceneTransitionTime);
         SceneManager.LoadScene("Scene1");
     }
 
     IEnumerator TransitionToMenu()
     {
-        sceneTransition.FadeOut();
+        endTransition.SetActive(true);
         yield return new WaitForSeconds(sceneTransitionTime);
         SceneManager.LoadScene("TitleMenu");
+    }
+
+    IEnumerator DisableTransitionScreen()
+    {
+        yield return new WaitForSeconds(sceneTransitionTime);
+        startTransition.SetActive(false);
     }
 }
