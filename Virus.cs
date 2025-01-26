@@ -10,6 +10,7 @@ public class Virus : MonoBehaviour
     [SerializeField] int health = 1;
     [SerializeField] GameObject hitParticles;
     [SerializeField] float deathDelay = 1f;
+    [SerializeField] AudioClip damageSound;
 
     [Header("Splitter")]
     [SerializeField] bool isSplitter = false;
@@ -22,6 +23,7 @@ public class Virus : MonoBehaviour
     private Mainframe mainframe;
     private GameManager gameManager;
     private ScreenShake screenShake;
+    private AudioSource audioSource;
 
     private bool isDying = false;
 
@@ -32,6 +34,7 @@ public class Virus : MonoBehaviour
         mainframe = FindObjectOfType<Mainframe>();
         gameManager = FindObjectOfType<GameManager>();
         screenShake = FindObjectOfType<ScreenShake>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -50,6 +53,11 @@ public class Virus : MonoBehaviour
 
     private void Damage()
     {
+        if(damageSound != null && audioSource != null)
+        {
+            PlaySound2D(damageSound);
+        }
+
         animator.SetTrigger("hit");
         health--;
         if(health <= 0)
@@ -65,6 +73,16 @@ public class Virus : MonoBehaviour
             DisableVirus();
             StartCoroutine(DestroyAfterAnimation());
         }
+    }
+
+    private void PlaySound2D(AudioClip clip)
+    {
+        GameObject soundObject = new GameObject("TempAudio");
+        AudioSource audioSource = soundObject.AddComponent<AudioSource>();
+        audioSource.clip = clip;
+        audioSource.spatialBlend = 0f;
+        audioSource.Play();
+        Destroy(soundObject, clip.length);
     }
 
     private void DisableVirus()
