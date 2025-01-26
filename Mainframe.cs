@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class Mainframe : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] GameObject hitParticles;
+
+    private Animator anim;
+
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        anim.SetTrigger("hit");   
+        CreateHitParticles();
+    }
+
+    private void CreateHitParticles()
+    {
+        GameObject newParticles = Instantiate(hitParticles, transform.position, Quaternion.identity);
+        Destroy(newParticles, 2f);
     }
 }

@@ -8,6 +8,7 @@ public class VirusSpawner : MonoBehaviour
     [SerializeField] float spawnIntervalMin = 0.1f;
     [SerializeField] float spawnIntervalMax = 2f;
     [SerializeField] float spawnDistance = 15f;
+    [SerializeField] float startSpawningDelay = 1f;
 
     private Vector2 screenBounds;
     private float spawnInterval;
@@ -16,6 +17,12 @@ public class VirusSpawner : MonoBehaviour
     {
         spawnInterval = Random.Range(spawnIntervalMin, spawnIntervalMax);
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        StartCoroutine(StartSpawning());
+    }
+
+    IEnumerator StartSpawning()
+    {
+        yield return new WaitForSeconds(startSpawningDelay);
         StartCoroutine(SpawnViruses());
     }
 
@@ -33,6 +40,9 @@ public class VirusSpawner : MonoBehaviour
         float angle = Random.Range(0f, 360f);
         Vector2 spawnPosition = new Vector2(Mathf.Cos(angle) * spawnDistance, Mathf.Sin(angle) * spawnDistance);
 
-        Instantiate(virusPrefab, spawnPosition, Quaternion.identity);
+        float randomRotationZ = Random.Range(0f, 360f);
+        Quaternion randomRotation = Quaternion.Euler(0f, 0f, randomRotationZ);
+
+        Instantiate(virusPrefab, spawnPosition, randomRotation);
     }
 }

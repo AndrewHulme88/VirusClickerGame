@@ -30,7 +30,7 @@ public class MainMenu : MonoBehaviour
     {
         endTransition.SetActive(true);
         yield return new WaitForSeconds(sceneTransitionTime);
-        SceneManager.LoadScene("Scene1");
+        SceneManager.LoadScene("Tutorial");
     }
 
     IEnumerator TransitionToMenu()
