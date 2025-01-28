@@ -49,9 +49,9 @@ public class GameManager : MonoBehaviour
 
     private void UpdateScoreUI()
     {
-        infectedScoreText.text = "Mainframe Health: " + mainframeHealth.ToString();
-        bugsCaughtScoreText.text = "Bugs Killed: " + Score.score.ToString();
-        bugsLeftText.text = "Bugs Remaining: " + bugsLeft.ToString();
+        infectedScoreText.text = "System Health: " + mainframeHealth.ToString();
+        bugsCaughtScoreText.text = "Virus Killed: " + Score.score.ToString();
+        bugsLeftText.text = "Virus Remaining: " + bugsLeft.ToString();
 
         if (mainframeHealth <= 0)
         {
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
     {
         sceneTransition.FadeOut();
         yield return new WaitForSeconds(sceneTransitionTime);
-        SceneManager.LoadScene("GameOver");
+        SceneManager.LoadScene("GameOverMenu");
     }
 
     private void DestroyAllViruses()
