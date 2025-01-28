@@ -6,9 +6,11 @@ using TMPro;
 public class GameOverScreen : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI highScoreText;
 
     void Start()
     {
-        scoreText.text = "Bugs Squashed: " + Score.score.ToString();
+        scoreText.text = "Viruses Killed: " + Score.score.ToString();
+        highScoreText.text = "High Score: " + Score.GetHighScore().ToString();
     }
 }

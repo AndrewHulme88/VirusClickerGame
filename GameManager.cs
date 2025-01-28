@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
 
     IEnumerator GameOver()
     {
+        Score.SaveHighScore();
+        int highScore = Score.GetHighScore();
         sceneTransition.FadeOut();
         yield return new WaitForSeconds(sceneTransitionTime);
         SceneManager.LoadScene("GameOverMenu");
