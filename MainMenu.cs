@@ -53,6 +53,12 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(TransitionToHighScores());
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+        Debug.Log("Game has been quit");
+    }
+
     public void GoToNextScene()
     {
         if (clickSound != null)

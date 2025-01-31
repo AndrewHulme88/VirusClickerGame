@@ -22,7 +22,7 @@ public static class Score
 
     public static int GetHighScore()
     {
-        return PlayerPrefs.GetInt("HighScore", 0);
+        return PlayerPrefs.GetInt("HighScore0", 0);
     }
 
     public static int[] GetHighScores()

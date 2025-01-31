@@ -50,8 +50,8 @@ public class GameManager : MonoBehaviour
     private void UpdateScoreUI()
     {
         infectedScoreText.text = "System Health: " + mainframeHealth.ToString();
-        bugsCaughtScoreText.text = "Virus Killed: " + Score.score.ToString();
-        bugsLeftText.text = "Virus Remaining: " + bugsLeft.ToString();
+        bugsCaughtScoreText.text = "Viruses Killed: " + Score.score.ToString();
+        bugsLeftText.text = "Viruses Remaining: " + bugsLeft.ToString();
 
         if (mainframeHealth <= 0)
         {
