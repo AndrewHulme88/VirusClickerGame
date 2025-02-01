@@ -18,6 +18,11 @@ public class Virus : MonoBehaviour
     [SerializeField] int splitCount = 2;
     [SerializeField] float splitOffest = 1f;
 
+    [SerializeField] bool isSplit = false;
+
+    [Header("BloodEffect")]
+    [SerializeField] GameObject[] bloodSplatterPrefabs;
+
     private Rigidbody2D rb;
     private Animator animator;
     private Mainframe mainframe;
@@ -69,7 +74,13 @@ public class Virus : MonoBehaviour
             {
                 Split();
             }
-            gameManager.AddBugsCaughtScore(bugsCaughtscore);
+
+            if(!isSplit)
+            {
+                gameManager.AddBugsCaughtScore(bugsCaughtscore);
+
+            }
+
             DisableVirus();
             StartCoroutine(DestroyAfterAnimation());
         }
@@ -94,6 +105,7 @@ public class Virus : MonoBehaviour
     private IEnumerator DestroyAfterAnimation()
     {
         yield return new WaitForSeconds(deathDelay);
+        CreateBloodSplatter();
         Destroy(this.gameObject);
     }
 
@@ -111,6 +123,19 @@ public class Virus : MonoBehaviour
     {
         GameObject newParticles = Instantiate(hitParticles, transform.position, Quaternion.identity);
         Destroy(newParticles, 2f);
+    }
+
+    private void CreateBloodSplatter()
+    {
+        if (bloodSplatterPrefabs.Length > 0)
+        {
+            for (int i = 0; i < 2; i++) 
+            {
+                GameObject chosenSplatter = bloodSplatterPrefabs[Random.Range(0, bloodSplatterPrefabs.Length)];
+                Vector3 offset = new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0); 
+                Instantiate(chosenSplatter, transform.position + offset, Quaternion.Euler(0, 0, Random.Range(0, 360)));
+            }
+        }
     }
 
     private void Split()

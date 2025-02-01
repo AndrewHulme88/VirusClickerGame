@@ -1,41 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FinalScene : MonoBehaviour
+public class FinalScore : MonoBehaviour
 {
-    [SerializeField] GameObject particles;
-    [SerializeField] GameObject cpu;
-    [SerializeField] GameObject virus;
-    [SerializeField] GameObject background;
-    [SerializeField] float particleSpawnTime = 5f;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI highScoreText;
     [SerializeField] GameObject startTransition;
     [SerializeField] GameObject endTransition;
     [SerializeField] float sceneTransitionTime = 1f;
+    [SerializeField] float waitTime = 5f;
 
     void Start()
     {
         endTransition.SetActive(false);
         startTransition.SetActive(true);
-        StartCoroutine("SpawnParticles");
+        scoreText.text = "Viruses Killed: " + Score.score.ToString();
+        highScoreText.text = "High Score: " + Score.GetHighScore().ToString();
+        StartCoroutine(WaitForTime());
     }
 
-    IEnumerator SpawnParticles()
+    IEnumerator WaitForTime()
     {
-        yield return new WaitForSeconds(particleSpawnTime);
-        particles.SetActive(true);
-        cpu.SetActive(false);
-        virus.SetActive(false);
-        background.SetActive(false);
+        yield return new WaitForSeconds(waitTime);
         StartCoroutine(TransitionToNextScene());
     }
 
     IEnumerator TransitionToNextScene()
     {
-        Score.SaveHighScore();
         endTransition.SetActive(true);
         yield return new WaitForSeconds(sceneTransitionTime);
-        SceneManager.LoadScene("EndScore");
+        SceneManager.LoadScene("EndCredits");
     }
 }

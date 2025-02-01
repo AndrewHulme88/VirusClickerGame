@@ -2,29 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
 
 public class Dialog : MonoBehaviour
 {
+    [SerializeField] float typingSpeed = 0.2f;
+    [SerializeField] MainMenu mainMenu;
+    [SerializeField] AudioClip clickSound;
+
     public TextMeshProUGUI textDisplay;
     public string[] sentences;
     public GameObject continueButton;
 
     private int index;
-    public float typingSpeed = 0.2f;
+    private AudioSource audioSource;
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         StartCoroutine(Type());
     }
-
-    //private void Update()
-    //{
-    //    if(textDisplay.text == sentences[index])
-    //    {
-    //        continueButton.SetActive(true);
-    //    }
-    //}
 
     IEnumerator Type()
     {
@@ -39,6 +35,11 @@ public class Dialog : MonoBehaviour
 
     public void NextSentence()
     {
+        if (clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
+
         continueButton.SetActive(false);
 
         if(index < sentences.Length - 1)
@@ -51,6 +52,7 @@ public class Dialog : MonoBehaviour
         {
             textDisplay.text = "";
             continueButton.SetActive(false);
+            mainMenu.GoToNextScene();
         }
     }
 }
